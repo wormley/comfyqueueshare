@@ -24,7 +24,7 @@ while(1):
         # walk the list of secondary queues, look for any that are
         # empty and have no running jobs
     except Exception as error: 
-        print("Exception on primary:", error)
+        print("Exception on primary: ", error)
         print("Delaying before reattempt")
         time.sleep(long_delay)
         continue
