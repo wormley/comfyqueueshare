@@ -17,18 +17,19 @@ while(1):
     try:
         # check to see if there's any pending items
         pri_info = requests.get(pri+"/prompt").json()
-        if (pri_info['exec_info']['queue_remaining'] == 0 ):
+        queue_remaining=pri_info['exec_info']['queue_remaining']
+        if (queue_remaining <2 ):
             time.sleep(delay)
             continue
-        print("Found items in queue, checking for available secondaries")
-        # walk the list of secondary queues, look for any that are
-        # empty and have no running jobs
+        print("Found "+str(queue_remaining)+" items in queue, checking for available secondaries")
     except Exception as error: 
         print("Exception on primary: ", error)
         print("Delaying before reattempt")
         time.sleep(long_delay)
         continue
 
+    # walk the list of secondary queues, look for any that are
+    # empty and have no running jobs
     for i in sec:
         try:
             info = requests.get(i+"/prompt").json()
@@ -53,6 +54,7 @@ while(1):
         d = requests.post(pri+"/queue", json={"delete": [pri_uuid]})
         print(d.text)
         # sadly, that doesn't return a useful status code, so we check the queue again
+        # if it's been moved to running then we lost the race
         pri_queue = requests.get(pri+"/queue").json()
         if (pri_queue['queue_running'][0][1] == pri_uuid):
             # too slow
