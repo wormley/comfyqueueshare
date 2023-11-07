@@ -2,7 +2,7 @@ Really simplistic script to distribute queued prompts.
 
 Takes a primary node and 1 or more secondary nodes, when it sees the primary has >0 pending in queue it tries to move them to idle secondary nodes.
 
-python3 queueshare.py http://primary:8188 http://secondary1:8188 http://secondary2.8188 ...
+python3 queueshare.py http://primary:8188 http://secondary1:8188 http://secondary2:8188 ...
 
 Notes:
 
